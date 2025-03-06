@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-cm
+  namespace: argocd
+data:
+  url: http://localhost:8082
+  dex.config: |
+    connectors:
+      - type: github
+        id: github
+        name: GitHub
+        config:
+          clientID: Ov23liIV8H5YxDRJtnWU
+          clientSecret: 11ae382e4257c4054ff31fb5cda4c0eb0a1e328f
+        

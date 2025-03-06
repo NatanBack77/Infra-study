@@ -1,0 +1,27 @@
+app:
+  replicas: 1
+  containerPort: 3000
+  image:
+    repository: natandevback707/stripe-api-nestjs
+    tags: latest
+  service:
+    port: 80
+    targetPort: 3000
+    nodePort: 30000
+global:
+  postgresql:
+    enabled: true
+    auth:
+      username: fincode
+      password: S3cret
+      database: fincode
+  stripe:
+    key: "sk_test_51QIBw606nRmRVtvsbmhA2iZEjmQcZdnZsNFppwSa02ywCXoCJ6IFC7fdAM3BYbMf1n0RkqNSAPNAs3YPwfGRU3B400NXp3RWn9"
+    webhook: "whsec_6716b172eedfe03e7022675f04b3adc10881c42c57c0c7e5c9fd3cc2487c58a6"
+  redis:
+   enabled: true
+   auth:
+    enabled: false
+   architecture: standalone  # Garante que o Redis não terá réplicas
+   replicas:
+    replicaCount: 0

@@ -1,0 +1,33 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+spec:
+  replicas: {{ .Values.app.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+    spec:
+         containers:
+           - name: {{ .Release.Name }}
+             image: {{ .Values.app.image.repository }}:{{ .Values.app.image.tags }}
+             ports:
+               - containerPort: {{ .Values.app.containerPort}}
+             {{- if and (.Values.global.postgresql.enabled) (.Values.global.redis.enabled) }}
+             env:
+              - name: DATABASE_URL
+                value: "postgres://{{ .Values.global.postgresql.auth.username }}:{{ .Values.global.postgresql.auth.password }}@{{ .Release.Name }}-postgresql:5432/{{ .Values.global.postgresql.auth.database }}"
+              - name: STRIPE_API_KEY
+                value: {{ .Values.global.stripe.key }}
+              - name: STRIPE_WEBHOOK_SECRET
+                value: {{ .Values.global.stripe.webhook }}
+              - name: REDISCLOUD_URL
+                value: "redis://{{ .Release.Name }}-redis-master-0:6379"
+              {{- end -}}
+
+  
